@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agujeros Negros: Los Gigantes del Cosmos</title>
+    <link rel="icon" type="image/png" href="img/logo.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="background-container"></div>
+
+    <header class="main-header">
+        <div class="logo-container">
+            <img src="img/logo.png" alt="Logo Agujero Negro" class="logo">
+            <h1>Agujeros Negros</h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Sección de introducción con el GIF de colisión -->
+        <section class="intro">
+            <img src="gif/black.gif" alt="Colisión de Agujeros Negros" class="hero-black-hole" id="collision-gif">
+            <p>Explora los objetos más misteriosos y extremos del universo. Aquí encontrarás información sobre los agujeros negros más fascinantes conocidos por la ciencia.</p>
+        </section>
+
+        <!-- Grid de Agujeros Negros -->
+        <section id="black-hole-list" class="black-hole-grid">
+            <!-- Aquí JavaScript inserta las tarjetas -->
+        </section>
+
+        <!-- NUEVA SECCIÓN: Espaguetización -->
+        <section class="spaghettification-section">
+            <h2 class="section-title">El Fenómeno de la Espaguetización</h2>
+            <div class="spaghettification-container">
+                <img src="img/espaguetizacion.avif" alt="Espaguetización" class="spaghettification-img" id="spaghettification-img">
+                <p class="spaghettification-hint">Haz clic para descubrir qué le sucede a la materia</p>
+            </div>
+        </section>
+
+        <!-- Sección NASA APOD -->
+        <section class="featured">
+            <h2>Imagen Astronómica del Día</h2>
+            <div id="apod-container">
+                <!-- Aquí JavaScript inserta la imagen de la NASA -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Proyecto de Pensamiento Computacional | 4°F</p>
+    </footer>
+
+    <!-- Ventana Modal -->
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"></h2>
+            <div id="modal-body">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
+<script src="js/config.js"></script>
+<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
