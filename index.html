@@ -19,18 +19,18 @@
 
     <main class="container">
         <!-- Sección de introducción con el GIF de colisión -->
-        <section class="intro">
+        <section class="intro scroll-reveal">
             <img src="gif/black.gif" alt="Colisión de Agujeros Negros" class="hero-black-hole" id="collision-gif">
             <p>Explora los objetos más misteriosos y extremos del universo. Aquí encontrarás información sobre los agujeros negros más fascinantes conocidos por la ciencia.</p>
         </section>
 
         <!-- Grid de Agujeros Negros -->
-        <section id="black-hole-list" class="black-hole-grid">
+        <section id="black-hole-list" class="black-hole-grid scroll-reveal">
             <!-- Aquí JavaScript inserta las tarjetas -->
         </section>
 
-        <!-- NUEVA SECCIÓN: Espaguetización -->
-        <section class="spaghettification-section">
+        <!-- Sección: Espaguetización -->
+        <section class="spaghettification-section scroll-reveal">
             <h2 class="section-title">El Fenómeno de la Espaguetización</h2>
             <div class="spaghettification-container">
                 <img src="img/espaguetizacion.avif" alt="Espaguetización" class="spaghettification-img" id="spaghettification-img">
@@ -38,8 +38,27 @@
             </div>
         </section>
 
+        <!-- Sección: Datos Curiosos -->
+        <section class="fun-fact-section scroll-reveal">
+            <h2>¿Sabías que...?</h2>
+            <div class="fact-container">
+                <p id="fact-text">Haz clic en el botón para descubrir un dato increíble sobre los agujeros negros.</p>
+                <button id="fact-btn" class="fact-btn">🪐 Generar Dato Cósmico</button>
+            </div>
+        </section>
+
+        <!-- NUEVA SECCIÓN: Minijuego Agujero Negro -->
+        <section class="game-section scroll-reveal">
+            <h2 class="section-title">Simulador de Acreción</h2>
+            <p class="game-desc">Controla el agujero negro con tu mouse y devora toda la materia que se acerque. ¡Cuidado, si dejas escapar los asteroides perderás vidas!</p>
+            <div class="game-container">
+                <div id="ui">Puntos: <span id="score">0</span> | Vidas: <span id="lives">3</span> | Radio: <span id="radius">25</span></div>
+                <canvas id="game" width="600" height="400"></canvas>
+            </div>
+        </section>
+
         <!-- Sección NASA APOD -->
-        <section class="featured">
+        <section class="featured scroll-reveal">
             <h2>Imagen Astronómica del Día</h2>
             <div id="apod-container">
                 <!-- Aquí JavaScript inserta la imagen de la NASA -->
@@ -61,8 +80,8 @@
             </div>
         </div>
     </div>
-<script src="js/config.js"></script>
-<script src="js/script.js"></script>
+
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

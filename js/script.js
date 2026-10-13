@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "TON 618": "gif/Ton618.gif"       
     };
 
-    // --- Función para obtener datos de la API de Agujeros Negros ---
+    // --- Función para obtener datos de la API ---
     async function fetchBlackHoles() {
         try {
             const response = await fetch(BLACK_HOLE_API_URL);
@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // Lógica del clic en las tarjetas
             card.addEventListener('click', () => {
                 if (name === "Sagitario A*") {
                     const infoSagitario = `<h3>Descubrimientos e Hitos</h3><ul><li><strong>Primera imagen:</strong> En mayo de 2022, la colaboración del Event Horizon Telescope (EHT) reveló la primera fotografía directa de su sombra.</li><li><strong>Estrellas en órbita:</strong> El seguimiento de estrellas cercanas como el grupo S demostró la existencia de este objeto masivo.</li><li><strong>Actividad pasada:</strong> Ha tenido episodios de actividad o "despertar" al consumir gas y materia en el pasado reciente.</li></ul>`;
@@ -92,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (collisionGif) {
         collisionGif.addEventListener('click', () => {
             const audio = new Audio('mp3/black.mp3');
-            audio.play().catch(e => console.log("El navegador bloqueó el audio hasta que haya interacción:", e));
+            audio.play().catch(e => console.log("El navegador bloqueó el audio:", e));
             
             const infoColision = `
                 <p>Una colisión de agujeros negros es la fusión de dos de estos objetos masivos que libera una enorme cantidad de energía en forma de ondas gravitacionales.</p>
@@ -103,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <li><strong>Fusión:</strong> Se unen en un solo agujero negro cuya masa final es ligeramente menor que la suma de ambos, ya que parte de la masa se convierte en energía pura.</li>
                 </ul>
                 <h4>Detección y registros</h4>
-                <p>Los científicos detectan estos choques cósmicos mediante observatorios avanzados como LIGO y Virgo, los cuales captan las vibraciones del espaciotiempo. Eventos notables como GW190521 han desafiado los modelos astrofísicos tradicionales sobre el tamaño de estos objetos.</p>
+                <p>Los científicos detectan estos choques cósmicos mediante observatorios avanzados como LIGO y Virgo. Eventos notables como GW190521 han desafiado los modelos astrofísicos tradicionales.</p>
             `;
             openModal("Colisión de Agujeros Negros", infoColision);
         });
@@ -127,6 +126,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- EFECTO 3D TILT EN LAS TARJETAS ---
+    document.addEventListener('mousemove', (e) => {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            if (x > -100 && x < rect.width + 100 && y > -100 && y < rect.height + 100) {
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            } else {
+                card.style.transform = '';
+            }
+        });
+    });
+
+    // --- GENERADOR DE DATOS CURIOSOS ---
+    const facts = [
+        "Si pudieras caer en un agujero negro, el tiempo se ralentizaría tanto que verías el fin del universo antes de cruzar el horizonte de sucesos.",
+        "El agujero negro más grande conocido, TON 618, es tan masivo que su horizonte de sucesos es más grande que la órbita de Neptuno.",
+        "Los agujeros negros no son aspiradoras cósmicas. Si el Sol se convirtiera en uno (imposible), la Tierra seguiría orbitando tranquilamente.",
+        "En 2019, el Event Horizon Telescope capturó la primera imagen de un agujero negro, pero en realidad vemos la luz doblada por su gravedad.",
+        "Un agujero negro del tamaño de una moneda tendría una masa similar a la de la Tierra, pero su gravedad destrozaría todo a su paso.",
+        "Los agujeros negros emiten radiación de Hawking, lo que significa que lentamente pierden masa y eventualmente podrían evaporarse.",
+        "El agujero negro estelar más cercano a la Tierra se encuentra a unos 1.500 años luz de distancia."
+    ];
+
+    const factBtn = document.getElementById('fact-btn');
+    const factText = document.getElementById('fact-text');
+
+    if (factBtn && factText) {
+        factBtn.addEventListener('click', () => {
+            factText.style.opacity = 0;
+            setTimeout(() => {
+                const randomFact = facts[Math.floor(Math.random() * facts.length)];
+                factText.textContent = randomFact;
+                factText.style.opacity = 1;
+            }, 300);
+        });
+    }
+
+    // --- ANIMACIÓN AL HACER SCROLL (Scroll Reveal) ---
+    const revealElements = document.querySelectorAll('.scroll-reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    revealElements.forEach(el => {
+        observer.observe(el);
+    });
+
     // --- Funciones del Modal ---
     window.openModal = function(title, content) {
         document.getElementById('modal-title').innerText = title;
@@ -145,9 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- Función para la API de la NASA (APOD) con TU CLAVE ---
+    // --- API NASA APOD ---
     async function fetchAPOD() {
-        // AQUÍ ESTÁ TU CLAVE PERSONAL INTEGRADA
         const APOD_API_URL = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}`;
 
         try {
@@ -170,13 +228,160 @@ document.addEventListener('DOMContentLoaded', () => {
             console.warn('Error con la API de NASA. Usando imagen de respaldo:', error);
             const apodContainer = document.getElementById('apod-container');
             if (apodContainer) {
-                // Respaldo en caso de fallo
                 apodContainer.innerHTML = `
                     <img src="img/objeto-negro.avif" alt="Imagen de respaldo">
                     <p style="margin-top: 1rem; font-size: 0.9rem; color: #ccc;">No se pudo conectar con la NASA en este momento. Mostrando imagen local de respaldo.</p>
                 `;
             }
         }
+    }
+
+    // ============================================================
+    // --- MINIJUEGO: AGUJERO NEGRO DEVORADOR ---
+    // ============================================================
+    const canvas = document.getElementById('game');
+    
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let score = 0;
+        let lives = 3;
+        let gameOver = false;
+
+        const blackHole = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            r: 25,
+            baseR: 25,
+            pulse: 0
+        };
+
+        const asteroids = [];
+        let spawnTimer = 0;
+
+        // Hacer que el juego sea responsivo
+        canvas.addEventListener('mousemove', e => {
+            const rect = canvas.getBoundingClientRect();
+            // Factor de escala por si el canvas se ve más pequeño en pantalla
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            blackHole.x = (e.clientX - rect.left) * scaleX;
+            blackHole.y = (e.clientY - rect.top) * scaleY;
+        });
+
+        function spawnAsteroid() {
+            asteroids.push({
+                x: Math.random() * canvas.width,
+                y: -20,
+                r: Math.random() * 10 + 5,
+                speed: Math.random() * 1.5 + 1,
+                color: `hsl(${Math.random() * 60 + 20}, 80%, 60%)`
+            });
+        }
+
+        function update() {
+            if (gameOver) return;
+
+            const spawnRate = Math.max(12, 30 - Math.floor(blackHole.r / 5));
+            spawnTimer++;
+            if (spawnTimer > spawnRate) { spawnAsteroid(); spawnTimer = 0; }
+
+            if (blackHole.pulse > 0) blackHole.pulse *= 0.9;
+
+            for (let i = asteroids.length - 1; i >= 0; i--) {
+                const a = asteroids[i];
+                a.y += a.speed;
+
+                const dx = a.x - blackHole.x;
+                const dy = a.y - blackHole.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < blackHole.r + a.r) {
+                    asteroids.splice(i, 1);
+                    score++;
+                    const growth = 1 + a.r * 0.15;
+                    blackHole.r = Math.min(blackHole.r + growth, 180);
+                    blackHole.pulse = 1;
+
+                    document.getElementById('score').textContent = score;
+                    document.getElementById('radius').textContent = Math.round(blackHole.r);
+                    continue;
+                }
+
+                if (a.y > canvas.height + a.r) {
+                    asteroids.splice(i, 1);
+                    lives--;
+                    document.getElementById('lives').textContent = lives;
+                    if (lives <= 0) gameOver = true;
+                }
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const haloR = blackHole.r * 1.6 + blackHole.pulse * 20;
+            const gradient = ctx.createRadialGradient(
+                blackHole.x, blackHole.y, blackHole.r * 0.5,
+                blackHole.x, blackHole.y, haloR
+            );
+            gradient.addColorStop(0, 'rgba(138, 43, 226, 0.9)');
+            gradient.addColorStop(0.5, 'rgba(138, 43, 226, 0.3)');
+            gradient.addColorStop(1, 'rgba(138, 43, 226, 0)');
+            ctx.beginPath();
+            ctx.arc(blackHole.x, blackHole.y, haloR, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(blackHole.x, blackHole.y, blackHole.r, 0, Math.PI * 2);
+            ctx.fillStyle = '#000';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(blackHole.x, blackHole.y, blackHole.r, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsl(280, 100%, ${60 + blackHole.pulse * 20}%)`;
+            ctx.lineWidth = 4 + blackHole.pulse * 4;
+            ctx.stroke();
+
+            asteroids.forEach(a => {
+                ctx.beginPath();
+                ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2);
+                ctx.fillStyle = a.color;
+                ctx.fill();
+            });
+
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = 'white';
+                ctx.font = '30px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('¡Juego Terminado!', canvas.width / 2, canvas.height / 2);
+                ctx.font = '20px sans-serif';
+                ctx.fillText('Puntos: ' + score, canvas.width / 2, canvas.height / 2 + 40);
+                ctx.fillText('Haz clic para reiniciar', canvas.width / 2, canvas.height / 2 + 80);
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        gameLoop();
+
+        canvas.addEventListener('click', () => {
+            if (gameOver) {
+                score = 0; lives = 3; gameOver = false;
+                asteroids.length = 0;
+                blackHole.r = blackHole.baseR;
+                blackHole.pulse = 0;
+                document.getElementById('score').textContent = score;
+                document.getElementById('lives').textContent = lives;
+                document.getElementById('radius').textContent = Math.round(blackHole.r);
+            }
+        });
     }
 
     // --- Inicializar ---
